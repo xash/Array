@@ -1,0 +1,14 @@
+{ "version": "0.1"
+  , "summary": "Arrays with RRB-Trees"
+  , "description":
+  "This library implements arrays with an Relaxed Radix Balanced Tree (RRB-Tree) 
+backend. This makes them functional, but fast.
+
+Based on Phil Bagwell and Tiark Rompf: 'RRB-Trees: Efficient Immutable Vectors'.
+"
+  , "license":         "BSD3"
+  , "repository":      "http://github.com/xashili/Array.git"
+  , "elm-version":     "0.11"
+  , "dependencies":    {}
+  , "exposed-modules": [ "Array" ]
+}

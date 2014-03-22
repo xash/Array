@@ -173,7 +173,6 @@ Elm.Native.Array.make = function(elm) {
       if (a._0 == 0) {
         var newA = { ctor:"_Array", _0:0 };
         newA._1 = a._1.slice(from, a._1.length + 1);
-        console.log("leaf: ", newA);
         return newA;
       }
 

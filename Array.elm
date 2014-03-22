@@ -12,6 +12,9 @@ Radix Balanced-Trees for fast updating and concating.
 
 # Taking Arrays Apart
 @docs toList, slice
+
+# Manipulation Arrays
+@docs map
 -}
 
 import Basics (..)
@@ -26,6 +29,10 @@ fromList = foldl (Native.Array.push) Native.Array.empty
 {-| Creates a list from an array -}
 toList : Array a -> [a]
 toList = Native.Array.toList
+
+{-| Applies a function on every item in an array. -}
+map : (a -> b) -> Array a -> Array b
+map = Native.Array.map
 
 {-| Returns an empty array. -}
 empty : Array a

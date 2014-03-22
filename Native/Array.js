@@ -123,6 +123,16 @@ Elm.Native.Array.make = function(elm) {
       return list;
     }
 
+    // Maps a function over an array.
+    function map(f, a) {
+      var newA = { ctor:"_Array", _0:a._0, _1:new Array(a._1) };
+      if (a._0 > 0) { newA._2 = a._2; }
+      for (var i = 0; i < a._1.length; i++) {      
+        newA._1[i] = a._0 == 0 ? f(a._1[i]) : map(f, a._1[i]);
+      }
+      return newA;
+    }
+
     // Returns a sliced tree. The to is inclusive, but this may change,
     // when I understand, why e.g. JS does not handle it this way. :-)
     // If from or to is negative, they will select from the end on.
@@ -447,6 +457,7 @@ Elm.Native.Array.make = function(elm) {
       slice:F3(slice),
       get:F2(get),
       set:F3(set),
+      map:F2(map),
       length:length
     };
 

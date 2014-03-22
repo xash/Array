@@ -110,7 +110,139 @@ Elm.Native.Array.make = function(elm) {
         return null;
       }
     }
-   
+
+    // Returns a sliced tree. The to is inclusive, but this may change,
+    // when I understand, why e.g. JS does not handle it this way. :-)
+    // If from or to is negative, they will select from the end on.
+    // TODO: currently, it slices the right, then the left. This can be 
+    // optimized.
+    function slice(from, to, a) {
+      if (from < 0) { from += length(a); }
+      if (to < 0)   { to += length(a); }
+      return sliceLeft(from, sliceRight(to, a));
+    }
+
+    function sliceRight(to, a) {
+      if (to == length(a)) {
+        return a;
+      }
+
+      // Handle leaf level.
+      if (a._0 == 0) {
+        var newA = { ctor:"_Array", _0:0 };
+        newA._1 = a._1.slice(0, to + 1);
+        return newA;
+      }
+
+      // Slice the right recursively.
+      var right = getSlot(to, a);
+      var sliced = sliceRight(to - (right > 0 ? a._2[right - 1] : 0), a._1[right]);
+
+      // Maybe the a node is not even needed, as sliced contains the whole slice.
+      if (right == 0) {
+        return sliced;
+      }
+      
+      // Create new node.
+      var newA = { ctor:"_Array", _0:a._0
+                                , _1:a._1.slice(0, right + 1)
+                                , _2:a._2.slice(0, right + 1) };
+      newA._1[right] = sliced;
+      newA._2[right] = length(sliced) + (right > 0 ? newA._2[right - 1] : 0);
+      return newA;
+    }
+
+    function sliceLeft(from, a) {
+      if (from == 0) {
+        return a;
+      }
+
+      // Handle leaf level.
+      if (a._0 == 0) {
+        var newA = { ctor:"_Array", _0:0 };
+        newA._1 = a._1.slice(from, a._1.length + 1);
+        console.log("leaf: ", newA);
+        return newA;
+      }
+
+      // Slice the left recursively.
+      var left = getSlot(from, a);
+      var sliced = sliceLeft(from - (left > 0 ? a._2[left - 1] : 0), a._1[left]);
+
+      // Maybe the a node is not even needed, as sliced contains the whole slice.
+      if (left == a._1.length - 1) {
+        return sliced;
+      }
+
+      // Create new node.
+      var newA = { ctor:"_Array", _0:a._0
+                                , _1:a._1.slice(left, a._1.length + 1)
+                                , _2:new Array(a._1.length - left) };
+      newA._1[left] = sliced; 
+      var len = 0;
+      for (var i = 0; i < newA._1.length; i++) {
+        len += length(newA._1[i]);
+        newA._2[i] = len;
+      }
+
+      return newA;
+    }
+      
+    // TODO: refactor code.
+    /*function slice_(from, to, a) {
+      console.log("slice ", from, to, a);
+      if (a._0 == 0) {
+        var newA = { ctor:"_Array", _0:0 };
+        newA._1 = a._1.slice(from, to);
+        console.log("Nope");
+        return newA;
+      }
+
+      var lSlot = getSlot(from, a);
+      var rSlot = getSlot(to, a);
+      if (lSlot == rSlot) {
+        console.log("0");
+        return slice_(from - a._2[lSlot - 1], to - a._2[rSlot - 1], a._1[lSlot]);
+      }
+
+      var newA = { ctor:"_Array", _0:a._0 };
+      if (from == 0) {
+        sliced = slice_(0, to - a._2[rSlot - 1], a._1[rSlot]);
+        newA._1 = a._1.slice(0, rSlot + 1);
+        newA._2 = a._2.slice(0, rSlot + 1);
+        newA._1[rSlot] = sliced;
+        var len = length(rSlot);
+        newA._2[rSlot] = rSlot == 0 ? len : len + newA._2[rSlot - 1];
+        console.log("1", newA);
+        return newA;
+      }
+      if (to == length(a)) {
+        sliced = slice_(from - a._2[lSlot - 1], length(a._2), a._1[rSlot]);
+        newA._1 = a._1.slice(lSlot, a._1.length);
+        newA._1[0] = sliced;
+        newA._2 = new Array(a._2.length - lSlot);
+        for (var i, len = 0; i < newA._2.length; i++) {
+          len += length(newA._2[i]);
+          newA._2[i] = len;
+        }
+        console.log("2", newA);
+        return newA;
+      }
+      rSliced = slice_(0, to - a._2[rSlot - 1], a._1[rSlot - 1]);
+      lSliced = slice_(from - a._2[lSlot - 1], length(a._2), a._1[lSlot]);
+      newA._1 = a._1.slice(lSlot, rSlot + 1);
+      newA._1[0], newA._1[rSlot] = lSliced, rSliced;
+      newA._2 = new Array(rSlot - lSlot);
+      for (var i, len = 0; i < newA._2.length; i++) {
+        len += length(newA._2[i]);
+        newA._2[i] = len;
+      }
+      console.log("3", newA);
+      return newA;
+    }*/
+
+
+
     // Concats two trees.
     // TODO: Add support for concatting trees of different sizes. Current
     // behavior will just rise the lower tree and then concat them.
@@ -355,6 +487,7 @@ Elm.Native.Array.make = function(elm) {
       empty:empty,
       concat:F2(concat),
       push:F2(push),
+      slice:F3(slice),
       get:F2(get),
       set:F3(set),
       length:length

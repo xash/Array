@@ -10,6 +10,8 @@ Radix Balanced-Trees for fast updating and concating.
 # Putting Arrays Together
 @docs fromList, concat, push, set
 
+# Taking Arrays Apart
+@docs slice
 -}
 
 import Basics (..)
@@ -36,6 +38,13 @@ get = Native.Array.get
 {-| Sets the value at at an index. Returns the updated array. -}
 set : Int -> a -> Array a -> Array a
 set = Native.Array.set
+
+{-| Slices an array given a selection with both Ints. The selection is 
+inclusive, so the last element in the selection will also be in the new
+array. This may change in the future.
+You can select from the end by giving a negative Int. -}
+slice : Int -> Int -> Array a -> Array a
+slice = Native.Array.slice
 
 {-| Returns the length of an array. -}
 length : Array a -> Int

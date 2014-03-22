@@ -6,7 +6,7 @@ Elm.Native.Array.make = function(elm) {
     if ('values' in Elm.Native.Array)
       return elm.Native.Array.values = Elm.Native.Array.values;
 
-    var Utils = Elm.Native.Utils.make(elm);
+    var List = Elm.Native.List.make(elm);
 
     // An RRB-Tree has two distinct data types. A leaf which contains data as
     // an array in _1, and a height in _0, that is always 0. A node has in
@@ -111,6 +111,18 @@ Elm.Native.Array.make = function(elm) {
       }
     }
 
+    // Converts an array into a list.
+    function toList(a) {
+      return toList_(List.Nil, a);
+    }
+
+    function toList_(list, a) {
+      for (var i = 0; i < a._1.length; i++) {
+        list = a._0 == 0 ? List.Cons(a._1[i], list) : toList_(list, a._1[i]);
+      }
+      return list;
+    }
+
     // Returns a sliced tree. The to is inclusive, but this may change,
     // when I understand, why e.g. JS does not handle it this way. :-)
     // If from or to is negative, they will select from the end on.
@@ -187,61 +199,6 @@ Elm.Native.Array.make = function(elm) {
 
       return newA;
     }
-      
-    // TODO: refactor code.
-    /*function slice_(from, to, a) {
-      console.log("slice ", from, to, a);
-      if (a._0 == 0) {
-        var newA = { ctor:"_Array", _0:0 };
-        newA._1 = a._1.slice(from, to);
-        console.log("Nope");
-        return newA;
-      }
-
-      var lSlot = getSlot(from, a);
-      var rSlot = getSlot(to, a);
-      if (lSlot == rSlot) {
-        console.log("0");
-        return slice_(from - a._2[lSlot - 1], to - a._2[rSlot - 1], a._1[lSlot]);
-      }
-
-      var newA = { ctor:"_Array", _0:a._0 };
-      if (from == 0) {
-        sliced = slice_(0, to - a._2[rSlot - 1], a._1[rSlot]);
-        newA._1 = a._1.slice(0, rSlot + 1);
-        newA._2 = a._2.slice(0, rSlot + 1);
-        newA._1[rSlot] = sliced;
-        var len = length(rSlot);
-        newA._2[rSlot] = rSlot == 0 ? len : len + newA._2[rSlot - 1];
-        console.log("1", newA);
-        return newA;
-      }
-      if (to == length(a)) {
-        sliced = slice_(from - a._2[lSlot - 1], length(a._2), a._1[rSlot]);
-        newA._1 = a._1.slice(lSlot, a._1.length);
-        newA._1[0] = sliced;
-        newA._2 = new Array(a._2.length - lSlot);
-        for (var i, len = 0; i < newA._2.length; i++) {
-          len += length(newA._2[i]);
-          newA._2[i] = len;
-        }
-        console.log("2", newA);
-        return newA;
-      }
-      rSliced = slice_(0, to - a._2[rSlot - 1], a._1[rSlot - 1]);
-      lSliced = slice_(from - a._2[lSlot - 1], length(a._2), a._1[lSlot]);
-      newA._1 = a._1.slice(lSlot, rSlot + 1);
-      newA._1[0], newA._1[rSlot] = lSliced, rSliced;
-      newA._2 = new Array(rSlot - lSlot);
-      for (var i, len = 0; i < newA._2.length; i++) {
-        len += length(newA._2[i]);
-        newA._2[i] = len;
-      }
-      console.log("3", newA);
-      return newA;
-    }*/
-
-
 
     // Concats two trees.
     // TODO: Add support for concatting trees of different sizes. Current
@@ -485,6 +442,7 @@ Elm.Native.Array.make = function(elm) {
 
     Elm.Native.Array.values = {
       empty:empty,
+      toList:toList,
       concat:F2(concat),
       push:F2(push),
       slice:F3(slice),

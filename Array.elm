@@ -21,7 +21,7 @@ data Array a = Array
 
 {-| Creates an array from a list. -}
 fromList : [a] -> Array a
-fromList = foldl (Native.Array.push) Native.Array.empty
+fromList = foldr (Native.Array.push) Native.Array.empty
 
 {-| Creates a list from an array -}
 toList : Array a -> [a]

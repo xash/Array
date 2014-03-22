@@ -117,7 +117,7 @@ Elm.Native.Array.make = function(elm) {
     }
 
     function toList_(list, a) {
-      for (var i = 0; i < a._1.length; i++) {
+      for (var i = a._1.length - 1; i >= 0; i--) {
         list = a._0 == 0 ? List.Cons(a._1[i], list) : toList_(list, a._1[i]);
       }
       return list;

@@ -23,53 +23,53 @@ import List
 
 data Array a = Array
 
-{-| Creates an array from a list. -}
+{-| Create an array from a list. -}
 fromList : [a] -> Array a
 fromList = List.foldl (Native.Array.push) Native.Array.empty
 
-{-| Creates a list from an array -}
+{-| Create a list from an array -}
 toList : Array a -> [a]
 toList = Native.Array.toList
 
-{-| Applies a function on every item in an array. -}
+{-| Apply a function on every item in an array. -}
 map : (a -> b) -> Array a -> Array b
 map = Native.Array.map
 
-{-| Reduces an array from the left. -}
+{-| Reduce an array from the left. -}
 foldl : (a -> b -> b) -> b -> Array a -> b
 foldl = Native.Array.foldl
 
-{-| Reduces an array from the right. -}
+{-| Reduce an array from the right. -}
 foldr : (a -> b -> b) -> b -> Array a -> b
 foldr = Native.Array.foldr
 
-{-| Returns an empty array. -}
+{-| Return an empty array. -}
 empty : Array a
 empty = Native.Array.empty
 
-{-| Pushes an item to the end of an array. -}
+{-| Push an item to the end of an array. -}
 push : a -> Array a -> Array a
 push = Native.Array.push
 
-{-| Returns the value at an index of an array. -}
+{-| Return the value at the index. -}
 get : Int -> Array a -> a
 get = Native.Array.get
 
-{-| Sets the value at at an index. Returns the updated array. -}
+{-| Sets the value at the index. Returns the updated array. -}
 set : Int -> a -> Array a -> Array a
 set = Native.Array.set
 
-{-| Slices an array given a selection with both Ints. The selection is 
-inclusive, so the last element in the selection will also be in the new
-array. This may change in the future.
+{-| Slice an array given a range. The selection is inclusive, so the last
+element in the selection will also be in the new array. This may change in the 
+future.
 You can select from the end by giving a negative Int. -}
 slice : Int -> Int -> Array a -> Array a
 slice = Native.Array.slice
 
-{-| Returns the length of an array. -}
+{-| Return the length of an array. -}
 length : Array a -> Int
 length = Native.Array.length
 
-{-| Concats to arrays to a new one. -}
+{-| Concat two arrays to a new one. -}
 concat : Array a -> Array a -> Array a
 concat = Native.Array.concat

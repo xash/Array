@@ -5,7 +5,7 @@ array must have the same type. The arrays are implemented in Relaxed
 Radix Balanced-Trees for fast updating and concating.
 
 # Basics
-@docs empty, length, get
+@docs empty, length, get, map
 
 # Putting Arrays Together
 @docs fromList, concat, push, set
@@ -13,18 +13,19 @@ Radix Balanced-Trees for fast updating and concating.
 # Taking Arrays Apart
 @docs toList, slice
 
-# Manipulation Arrays
-@docs map
+# Folding Arrays
+@docs foldl, foldr
 -}
 
 import Basics (..)
 import Native.Array
+import List
 
 data Array a = Array
 
 {-| Creates an array from a list. -}
 fromList : [a] -> Array a
-fromList = foldl (Native.Array.push) Native.Array.empty
+fromList = List.foldl (Native.Array.push) Native.Array.empty
 
 {-| Creates a list from an array -}
 toList : Array a -> [a]
@@ -33,6 +34,14 @@ toList = Native.Array.toList
 {-| Applies a function on every item in an array. -}
 map : (a -> b) -> Array a -> Array b
 map = Native.Array.map
+
+{-| Reduces an array from the left. -}
+foldl : (a -> b -> b) -> b -> Array a -> b
+foldl = Native.Array.foldl
+
+{-| Reduces an array from the right. -}
+foldr : (a -> b -> b) -> b -> Array a -> b
+foldr = Native.Array.foldr
 
 {-| Returns an empty array. -}
 empty : Array a

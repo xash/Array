@@ -133,6 +133,20 @@ Elm.Native.Array.make = function(elm) {
       return newA;
     }
 
+    function foldl(f, b, a) {
+      for (var i = a._1.length - 1; i >= 0; i--) {
+        b = A2(f, a._0 == 0 ? a._1[i] : foldl(f, b, a._1[i]), b);
+      }
+      return b;
+    }
+
+    function foldr(f, b, a) {
+      for (var i = 0; i < a._1.length; i++) {
+        b = A2(f, a._0 == 0 ? a._1[i] : foldr(f, b, a._1[i]), b);
+      }
+      return b;
+    }
+
     // Returns a sliced tree. The to is inclusive, but this may change,
     // when I understand, why e.g. JS does not handle it this way. :-)
     // If from or to is negative, they will select from the end on.
@@ -458,6 +472,8 @@ Elm.Native.Array.make = function(elm) {
       get:F2(get),
       set:F3(set),
       map:F2(map),
+      foldl:F3(foldl),
+      foldr:F3(foldr),
       length:length
     };
 

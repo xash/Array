@@ -1,4 +1,4 @@
-{ "version": "0.1"
+{ "version": "0.2"
   , "summary": "Arrays with RRB-Trees"
   , "description":
   "This library implements arrays with an Relaxed Radix Balanced Tree (RRB-Tree) 

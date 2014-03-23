@@ -1,4 +1,4 @@
-{ "version": "0.2.1"
+{ "version": "0.2.2"
   , "summary": "Arrays with RRB-Trees"
   , "description":
   "This library implements arrays with Relaxed Radix Balanced-Tree (RRB-Tree) 
@@ -6,10 +6,10 @@ backends. This makes them functional, but fast. Based on Phil Bagwell and Tiark
 Rompf: [\"RRB-Trees: Efficient Immutable Vectors\"](http://infoscience.epfl.ch/record/169879/files/RMTrees.pdf).
 
 To use this library, a JS file needs to be included when compiling. The file 
-should be at \"elm_dependencies/xashili-Array/0.2.1/Native/Array.js\" from where 
+should be at \"elm_dependencies/xashili-Array/0.2.2/Native/Array.js\" from where 
 you run elm-get. For example, to compile Main.elm in $PROJECT use:
 
-<code> elm -m --script=$PROJECT/elm_dependencies/xashili-Array/0.2.1/Native/Array.js Main.elm </code>
+<code> elm -m --script=$PROJECT/elm_dependencies/xashili-Array/0.2.2/Native/Array.js Main.elm </code>
 "
   , "license":         "BSD3"
   , "repository":      "http://github.com/xashili/Array.git"

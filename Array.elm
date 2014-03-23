@@ -17,7 +17,6 @@ Radix Balanced-Trees for fast updating and concating.
 @docs foldl, foldr
 -}
 
-import Basics (..)
 import Native.Array
 import List
 
